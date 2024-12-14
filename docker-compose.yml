@@ -1,0 +1,14 @@
+version: '3.9'
+services:
+  dev-db:
+    image: postgres:17
+    ports:
+      - 5440:5432
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: 12345
+      POSTGRES_DB: jsoncvdb
+    networks:
+      - mycustomnetwork
+networks:
+  mycustomnetwork:
