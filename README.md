@@ -19,6 +19,7 @@ $ npm install
 
 - You need Docker installed on your system in order to run `db:build` command
 - Migrations run automatically on `start`
+- open the app (in browser) - `localhost:3300`
 
 ```bash
 $ npm run db:build

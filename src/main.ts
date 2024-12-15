@@ -12,7 +12,7 @@ async function bootstrap() {
 
       And Swagger docs seemed like a perfect (and convenient) frontend for this app.
 
-      (because Swagger allows you to call the APIs as well - no Postman required)
+      (because Swagger also allows you to call the APIs - no Postman required)
     `)
     .setVersion('1.0')
     .build();
