@@ -1,6 +1,7 @@
 import { DataSource } from "typeorm";
 import { ConfigService } from "@nestjs/config";
 import { config } from 'dotenv';
+import { resolve } from 'path';
 
 config();
 
@@ -15,8 +16,9 @@ export default new DataSource({
     database: configService.get('DB_DATABASE'),
     entities: [`$(__dirname)/../src/**/*.entity{.ts,.js}`],
     // synchronize: configService.get('nodenv') === 'development',
-    synchronize: true,
+    synchronize: false,
     logging: configService.get('nodenv') === 'development',
-    migrations: [`$(__dirname)/migrations/*{.ts,.js}`],
-    migrationsTableName: 'migrations',
+    // use resolve() because migrations folder is outside src/
+    migrations: [resolve(__dirname, 'migrations/*{.ts,.js}')],
+    migrationsTableName: configService.get('DB_MIGRATIONS_TABLE'),
 });
