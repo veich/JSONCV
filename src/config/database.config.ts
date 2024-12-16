@@ -7,10 +7,11 @@ export default registerAs('database', () => ({
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
-    entities: [`$(__dirname)/../**/*.entity{.ts,.js}`],
     // synchronize: process.env.NODE_ENV === 'development',
     synchronize: false,
     logging: process.env.NODE_ENV === 'development',
-    migrations: [`$(__dirname)/../../db/migrations/*{.ts,.js}`],
+    // .js because this runs from dist/ folder
+    entities: [`$(__dirname)/../**/*.entity.js`],
+    migrations: [`$(__dirname)/../../db/migrations/*.js`],
     migrationsTableName: process.env.DB_MIGRATIONS_TABLE,
 }));

@@ -14,11 +14,12 @@ export default new DataSource({
     username: configService.get('DB_USERNAME'),
     password: configService.get('DB_PASSWORD'),
     database: configService.get('DB_DATABASE'),
-    entities: [`$(__dirname)/../src/**/*.entity{.ts,.js}`],
     // synchronize: configService.get('nodenv') === 'development',
     synchronize: false,
     logging: configService.get('nodenv') === 'development',
+    // .ts because this does not run from dist/ folder
+    entities: [`$(__dirname)/../src/**/*.entity.ts`],
     // use resolve() because migrations folder is outside src/
-    migrations: [resolve(__dirname, 'migrations/*{.ts,.js}')],
+    migrations: [resolve(__dirname, 'migrations/*.ts')],
     migrationsTableName: configService.get('DB_MIGRATIONS_TABLE'),
 });

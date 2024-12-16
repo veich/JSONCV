@@ -22,7 +22,13 @@ $ npm install
 - open the app (in browser) - `localhost:3300`
 
 ```bash
+# creates postgres DB (docker)
 $ npm run db:build
+
+# creates tables & default data
+$ npm run migration:run
+
+# starts the app
 $ npm run start
 ```
 
