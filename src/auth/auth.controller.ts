@@ -8,14 +8,14 @@ import { ApiBadRequestResponse, ApiOkResponse } from '@nestjs/swagger';
 export class AuthController {
   constructor(private readonly authService: AuthService) { }
 
-  @ApiOkResponse({ type: 'string' })
+  @ApiOkResponse({ type: String })
   @ApiBadRequestResponse()
   @Post('signup')
   signup(@Body() signupAuthDto: SignupAuthDto) {
     return this.authService.signup(signupAuthDto);
   }
 
-  @ApiOkResponse({ type: 'string' })
+  @ApiOkResponse({ type: String })
   @ApiBadRequestResponse()
   @HttpCode(HttpStatus.OK)
   @Post('login')
