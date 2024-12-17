@@ -10,14 +10,21 @@ async function bootstrap() {
 
   const docConfig = new DocumentBuilder()
     .setTitle('JSON CV - showcase your dev skills like a pro :)')
-    .setDescription(`
+    .setDescription(
+      `
       The main idea -> allow developers to create and share their CV in JSON format.
 
       And Swagger docs seemed like a perfect (and convenient) frontend for this app.
 
-      (because Swagger also allows you to call the APIs - no Postman required)
-    `)
+      Because Swagger also allows you to call the APIs - no Postman required.
+
+      Just make sure to enter your access_token into Authorize box on the right -->
+
+      (you'll get this token from /signup or /login endpoints)
+    `,
+    )
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, docConfig);
 

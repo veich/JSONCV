@@ -5,24 +5,24 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppConfig, DatabaseConfig } from './config';
 import { UsersModule } from './users/users.module';
 
-const configService = new ConfigService();
-
 @Module({
-  imports: [ConfigModule.forRoot({
-    isGlobal: true,
-    cache: true,
-    load: [AppConfig, DatabaseConfig],
-  }), TypeOrmModule.forRootAsync({
-    imports: [ConfigModule],
-    useFactory: (configService: ConfigService) => ({
-      ...configService.get('database'),
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      cache: true,
+      load: [AppConfig, DatabaseConfig],
     }),
-    inject: [ConfigService],
-  }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        ...configService.get('database'),
+      }),
+      inject: [ConfigService],
+    }),
     AuthModule,
-    UsersModule
+    UsersModule,
   ],
   controllers: [],
   providers: [],
 })
-export class AppModule { }
+export class AppModule {}

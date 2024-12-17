@@ -1,6 +1,7 @@
-import { registerAs } from "@nestjs/config";
+import { registerAs } from '@nestjs/config';
 
-export default registerAs('config', () => ({
-    port: parseInt(process.env.PORT) || 3000,
-    nodenv: process.env.NODE_ENV,
+export default registerAs('appConfig', () => ({
+  port: parseInt(process.env.PORT) || 3000,
+  nodenv: process.env.NODE_ENV,
+  jwtSecret: process.env.JWT_SECRET,
 }));
