@@ -5,9 +5,7 @@
 
   The main idea behind this app is to allow developers to create and share their CV in JSON format.
 
-## @Luiz
-
-  I didn't have prior experience with Nest and TypeORM specifically (only Express and Sequelize) so I created this app to get up to speed.
+  Swagger docs are the convenient "fontend" (`localhost:3300`) for this app because, aside from documenting, Swagger can also be used to make API calls. 
 
 ## Project setup
 
@@ -17,9 +15,8 @@ $ npm install
 
 ## Compile and run the project
 
-- You need Docker installed on your system in order to run `db:build` command
-- Migrations run automatically on `start`
-- open the app (in browser) - `localhost:3300`
+- You need Docker installed on your system in order to create database using `db:build` command
+- Open the app (in browser) - `localhost:3300`
 
 ```bash
 # creates postgres DB (docker)
@@ -42,12 +39,8 @@ $ npm run db:re:build
 
 ## Run tests
 
-I have a good test coverage so feel free to run this as well.
+There are a couple of tests as a proof-of-concept but adding more is on my TODO list :)
 
 ```bash
-# unit tests
 $ npm run test
-
-# e2e tests
-$ npm run test:e2e
 ```
