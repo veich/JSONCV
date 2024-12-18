@@ -1,55 +1,77 @@
 import {
   Controller,
   Get,
-  Post,
   Body,
   Patch,
   Param,
   Delete,
   ParseIntPipe,
-  // Request,
+  NotFoundException,
+  Request,
+  UnauthorizedException,
+  ForbiddenException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiAcceptedResponse, ApiBadRequestResponse, ApiBearerAuth, ApiForbiddenResponse, ApiNotFoundResponse, ApiOkResponse, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { Public } from 'src/auth/decorators/public.decorator';
+import { User } from './entities/user.entity';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  private cleanUser(user: User) {
+    const { passwordHash, ...cleanUser } = user;
+    return cleanUser;
   }
 
+  @ApiOkResponse({ type: User, isArray: true })
   @Public()
   @Get()
-  findAll() {
-    return this.usersService.findAll();
+  async findAll() {
+    const users = await this.usersService.findAll();
+    return users.map((user) => this.cleanUser(user));
   }
 
+  @ApiOkResponse({ type: User })
+  @ApiNotFoundResponse()
   @Public()
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    const user = await this.usersService.findOne(id);
+    if (!user) {
+      throw new NotFoundException();
+    }
+    return this.cleanUser(user);
   }
 
   // @UseGuards(AuthGuard)
+  @ApiOkResponse({ type: User })
+  @ApiForbiddenResponse()
+  @ApiBadRequestResponse()
   @ApiBearerAuth()
   @Patch(':id')
-  update(
-    @Param('id', ParseIntPipe) id: string,
+  async update(
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateUserDto: UpdateUserDto,
-    // @Request() req,
+    @Request() req,
   ) {
-    // console.log(req.user);
-    return this.usersService.update(+id, updateUserDto);
+    if (req.user.sub !== id) {
+      throw new ForbiddenException();
+    }
+    const updatedUser = await this.usersService.update(id, updateUserDto);
+    return this.cleanUser(updatedUser);
   }
 
+  @ApiOkResponse({ type: Object })
+  @ApiForbiddenResponse()
+  @ApiBearerAuth()
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+  remove(@Param('id', ParseIntPipe) id: number, @Request() req) {
+    if (req.user.sub !== id) {
+      throw new ForbiddenException();
+    }
+    return this.usersService.remove(id);
   }
 }

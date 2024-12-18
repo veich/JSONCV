@@ -12,14 +12,19 @@ export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
-  ) {}
+  ) { }
 
-  signup(signupAuthDto: SignupAuthDto) {
-    return 'signup - service';
+  async signup(signupAuthDto: SignupAuthDto) {
+    const user = await this.usersService.create(signupAuthDto);
+    const payload = { sub: user.id, email: user.email };
+    const response: AuthResponseDto = {
+      access_token: await this.jwtService.signAsync(payload),
+    };
+    return response;
   }
 
   async login(loginAuthDto: LoginAuthDto) {
-    const user: User = this.usersService.findByEmail(loginAuthDto.email);
+    const user: User = await this.usersService.findByEmail(loginAuthDto.email);
     const match: boolean =
       user && (await bcrypt.compare(loginAuthDto.password, user.passwordHash));
 

@@ -1,46 +1,50 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { SignupAuthDto } from 'src/auth/dto/signup-auth.dto';
+import * as bcrypt from 'bcrypt';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UsersService {
-  private readonly dummyUsers: User[] = [
-    {
-      id: 1,
-      email: 'john@mail.com',
-      passwordHash:
-        '$2b$10$CHjYd5AnTr9TDVMvgmRTCOiHk5It6dYR1MWCp5Jd5vpyvgk6izrHq', // password1
-    },
-    {
-      id: 2,
-      email: 'maria@mail.com',
-      passwordHash:
-        '$2b$10$CHjYd5AnTr9TDVMvgmRTCOMDyTs0g9OBS3G9XWYT9rDdp6.oKuezi', // password2
-    },
-  ];
+  constructor(
+    @InjectRepository(User) private usersRepository: Repository<User>,
+    private configService: ConfigService
+  ) { }
 
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  async create(signupAuthDto: SignupAuthDto) {
+    const passwordHash = await bcrypt.hash(
+      signupAuthDto.password,
+      this.configService.get('appConfig').bcryptSecret
+    );
+    const user: User = this.usersRepository.create({ ...signupAuthDto, passwordHash });
+    await this.usersRepository.save(user);
+    return user;
   }
 
   findAll() {
-    return `This action returns all users`;
+    return this.usersRepository.find();
   }
 
   findOne(userId: number) {
-    return this.dummyUsers.find((user) => user.id === userId);
+    return this.usersRepository.findOne({ where: { id: userId } });
   }
 
   findByEmail(email: string) {
-    return this.dummyUsers.find((user) => user.email === email);
+    return this.usersRepository.findOne({ where: { email } });
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    const user = await this.usersRepository.findOne({ where: { id } });
+    Object.assign(user, updateUserDto);
+    return this.usersRepository.save(user);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: number) {
+    const user = await this.usersRepository.findOne({ where: { id } });
+    await this.usersRepository.remove(user);
+    return {};
   }
 }

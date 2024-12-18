@@ -4,4 +4,5 @@ export default registerAs('appConfig', () => ({
   port: parseInt(process.env.PORT) || 3000,
   nodenv: process.env.NODE_ENV,
   jwtSecret: process.env.JWT_SECRET,
+  bcryptSecret: process.env.BCRYPT_SALT,
 }));
