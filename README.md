@@ -39,7 +39,7 @@ $ npm run db:re:build
 
 ## Run tests
 
-There are a couple of tests as a proof-of-concept but adding more is on my TODO list :)
+On my TODO list :)
 
 ```bash
 $ npm run test
