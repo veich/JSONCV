@@ -4,6 +4,7 @@ import { SignupAuthDto } from './dto/signup-auth.dto';
 import { LoginAuthDto } from './dto/login-auth.dto';
 import {
   ApiBadRequestResponse,
+  ApiConflictResponse,
   ApiOkResponse,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
@@ -12,10 +13,11 @@ import { Public } from './decorators/public.decorator';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   @ApiOkResponse({ type: AuthResponseDto })
   @ApiBadRequestResponse()
+  @ApiConflictResponse()
   @Public()
   @Post('signup')
   signup(@Body() signupAuthDto: SignupAuthDto) {

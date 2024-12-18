@@ -46,32 +46,39 @@ export class UsersController {
     return this.cleanUser(user);
   }
 
-  // @UseGuards(AuthGuard)
   @ApiOkResponse({ type: User })
-  @ApiForbiddenResponse()
+  // @ApiForbiddenResponse()
   @ApiBadRequestResponse()
   @ApiBearerAuth()
-  @Patch(':id')
+  @Patch()
+  // @Patch('id')
   async update(
-    @Param('id', ParseIntPipe) id: number,
+    // @Param('id', ParseIntPipe) id: number,
     @Body() updateUserDto: UpdateUserDto,
     @Request() req,
   ) {
-    if (req.user.sub !== id) {
-      throw new ForbiddenException();
-    }
-    const updatedUser = await this.usersService.update(id, updateUserDto);
+    // if (req.user.sub !== id) {
+    //   throw new ForbiddenException();
+    //   // this is (kinda) unnecessary
+    //   // we could avoid this issue completely if we remove :id param from endpoint
+    //   // and only allow each user to only update themselves
+    //   // .update(req.user.sub, updateUserDto);
+    //   // on the other hand...
+    //   // we might want to have some admin users that can delete others(?)
+    //   // but then again they could have their own dedicated /admin API
+    //   // the same goes for DELETE endpoint
+    //   // VERDICT: I'm removing it :)
+    // }
+    // const updatedUser = await this.usersService.update(id, updateUserDto);
+    const updatedUser = await this.usersService.update(req.user.sub, updateUserDto);
     return this.cleanUser(updatedUser);
   }
 
   @ApiOkResponse({ type: Object })
   @ApiForbiddenResponse()
   @ApiBearerAuth()
-  @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number, @Request() req) {
-    if (req.user.sub !== id) {
-      throw new ForbiddenException();
-    }
-    return this.usersService.remove(id);
+  @Delete()
+  remove(@Request() req) {
+    return this.usersService.remove(req.user.sub);
   }
 }

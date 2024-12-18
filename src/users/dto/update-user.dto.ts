@@ -6,4 +6,7 @@ export class UpdateUserDto {
 
     @ApiProperty()
     email?: string;
+
+    @ApiProperty()
+    skills?: string;
 }
