@@ -5,6 +5,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppConfig, DatabaseConfig } from './config';
 import { UsersModule } from './users/users.module';
 import { SkillsModule } from './skills/skills.module';
+import { PositionsModule } from './positions/positions.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { SkillsModule } from './skills/skills.module';
     AuthModule,
     UsersModule,
     SkillsModule,
+    PositionsModule,
   ],
   controllers: [],
   providers: [],
