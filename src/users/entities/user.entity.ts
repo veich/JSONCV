@@ -1,5 +1,4 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsJSON } from "class-validator";
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
@@ -20,7 +19,7 @@ export class User {
   passwordHash: string;
 
   @ApiProperty()
-  @Column({ nullable: true })
+  // @Column({ nullable: true })
   skills: string;
   // TODO:
   // - add additional tables - no more time now
