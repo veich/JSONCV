@@ -19,6 +19,6 @@ export class SkillsDataMigration1734813405208 implements MigrationInterface {
             .createQueryBuilder()
             .delete()
             .from(Skill)
-            .execute()
+            .execute();
     }
 }
