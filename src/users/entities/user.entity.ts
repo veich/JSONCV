@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Experience } from "src/experiences/entities/experience.entity";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class User {
@@ -19,13 +20,9 @@ export class User {
   passwordHash: string;
 
   @ApiProperty()
-  // @Column({ nullable: true })
-  skills: string;
-  // TODO:
-  // - add additional tables - no more time now
-  // - this field wouldn't be in DB at all
-  // - should be dynamically generated summary info when returning user
-  //   (from user -> work_experiences[] -> skills[])
-  //   Example:
-  //   "skills": "NodeJS, TypeScript, TypeORM"
+  // dynamically computed - not part of the user DB table
+  skills: string[];
+
+  @OneToMany(() => Experience, (experience) => experience.user)
+  experiences: Experience[];
 }

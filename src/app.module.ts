@@ -6,6 +6,7 @@ import { AppConfig, DatabaseConfig } from './config';
 import { UsersModule } from './users/users.module';
 import { SkillsModule } from './skills/skills.module';
 import { PositionsModule } from './positions/positions.module';
+import { ExperiencesModule } from './experiences/experiences.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { PositionsModule } from './positions/positions.module';
     UsersModule,
     SkillsModule,
     PositionsModule,
+    ExperiencesModule,
   ],
   controllers: [],
   providers: [],
