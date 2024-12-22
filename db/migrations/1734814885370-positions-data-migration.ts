@@ -5,13 +5,16 @@ export class PositionsDataMigration1734814885370 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         const positionsRepositiory = queryRunner.manager.getRepository(Position);
-        [
+
+        // improving on skills migration
+        // single query to insert all values
+        // instead of multiple await calls for each data row
+        const positions = [
             'FE Developer', 'Backend Developer', 'iOS Developer',
             'Android Developer', 'Machine Learning Engineer', 'DevOps Engineer'
-        ].forEach(async (positionName) => {
-            const position = await positionsRepositiory.create({ positionName });
-            await positionsRepositiory.save(position);
-        });
+        ].map((positionName) => positionsRepositiory.create({ positionName }));
+
+        await positionsRepositiory.save(positions);
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
