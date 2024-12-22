@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -13,6 +13,19 @@ export class UsersService {
     @InjectRepository(User) private usersRepository: Repository<User>,
     private configService: ConfigService
   ) { }
+
+  private addSkillsField(users: User[]): User[] {
+    users.forEach((user) => {
+      const skillsSet = new Set<string>();
+      user.experiences.forEach((experience) => {
+        experience.skills.forEach((skill) => {
+          skillsSet.add(skill.skillName);
+        });
+      });
+      user.skills = [...skillsSet];
+    });
+    return users;
+  }
 
   async create(signupAuthDto: SignupAuthDto) {
     const passwordHash = await bcrypt.hash(
@@ -33,22 +46,22 @@ export class UsersService {
         }
       }
     });
-
-    users.forEach((user) => {
-      const skillsSet = new Set<string>();
-      user.experiences.forEach((experience) => {
-        experience.skills.forEach((skill) => {
-          skillsSet.add(skill.skillName);
-        });
-      });
-      user.skills = [...skillsSet];
-    });
-
-    return users;
+    return this.addSkillsField(users);
   }
 
-  findOne(userId: number) {
-    return this.usersRepository.findOne({ where: { id: userId } });
+  async findOne(userId: number) {
+    const user = await this.usersRepository.findOne({
+      where: { id: userId },
+      relations: {
+        experiences: {
+          skills: true,
+          position: true,
+        }
+      }
+    });
+    if (!user) throw new NotFoundException();
+    const [userWithSkills] = this.addSkillsField([user]);
+    return userWithSkills;
   }
 
   findByEmail(email: string) {
