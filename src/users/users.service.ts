@@ -24,8 +24,27 @@ export class UsersService {
     return user;
   }
 
-  findAll() {
-    return this.usersRepository.find();
+  async findAll() {
+    const users = await this.usersRepository.find({
+      relations: {
+        experiences: {
+          skills: true,
+          position: true,
+        }
+      }
+    });
+
+    users.forEach((user) => {
+      const skillsSet = new Set<string>();
+      user.experiences.forEach((experience) => {
+        experience.skills.forEach((skill) => {
+          skillsSet.add(skill.skillName);
+        });
+      });
+      user.skills = [...skillsSet];
+    });
+
+    return users;
   }
 
   findOne(userId: number) {
