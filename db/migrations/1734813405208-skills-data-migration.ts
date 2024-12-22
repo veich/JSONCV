@@ -7,7 +7,8 @@ export class SkillsDataMigration1734813405208 implements MigrationInterface {
         const skillsRepositiory = queryRunner.manager.getRepository(Skill);
         [
             'NodeJS', 'TypeScript', 'Sequelize', 'TypeORM', 'PostgreSQL',
-            'Objective-C', 'Java', 'Swift', 'Kotlin', 'Python'
+            'Objective-C', 'Java', 'Swift', 'Kotlin', 'Python',
+            'HTML', 'CSS', 'JavaScript', 'jQuery'
         ].forEach(async (skillName) => {
             const skill = await skillsRepositiory.create({ skillName });
             await skillsRepositiory.save(skill);
