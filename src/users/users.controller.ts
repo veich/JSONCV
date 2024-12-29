@@ -8,13 +8,11 @@ import {
   ParseIntPipe,
   NotFoundException,
   Request,
-  UnauthorizedException,
-  ForbiddenException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ApiAcceptedResponse, ApiBadRequestResponse, ApiBearerAuth, ApiForbiddenResponse, ApiNotFoundResponse, ApiOkResponse, ApiUnauthorizedResponse } from '@nestjs/swagger';
-import { Public } from 'src/auth/decorators/public.decorator';
+import { ApiBadRequestResponse, ApiBearerAuth, ApiForbiddenResponse, ApiNotFoundResponse, ApiOkResponse } from '@nestjs/swagger';
+import { Public } from '../auth/decorators/public.decorator';
 import { User } from './entities/user.entity';
 
 @Controller('users')

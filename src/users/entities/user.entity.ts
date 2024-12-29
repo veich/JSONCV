@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Experience } from "src/experiences/entities/experience.entity";
+import { Experience } from "../../experiences/entities/experience.entity";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()

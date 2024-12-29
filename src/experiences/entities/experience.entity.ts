@@ -1,6 +1,6 @@
-import { Position } from "src/positions/entities/position.entity";
-import { Skill } from "src/skills/entities/skill.entity";
-import { User } from "src/users/entities/user.entity";
+import { Position } from "../../positions/entities/position.entity";
+import { Skill } from "../../skills/entities/skill.entity";
+import { User } from "../../users/entities/user.entity";
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
