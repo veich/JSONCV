@@ -5,7 +5,11 @@ import { UsersService } from './users.service';
 describe('UsersController', () => {
   let controller: UsersController;
 
-  const mockUsersService = {};
+  const mockUsersService = {
+    remove: jest.fn((x) => {
+      return {};
+    }),
+  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -22,4 +26,10 @@ describe('UsersController', () => {
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });
+
+  it('should delete user', async () => {
+    const mockRequest = { user: { sub: 1 } };
+    expect(controller.remove(mockRequest)).toEqual({});
+  });
+
 });
