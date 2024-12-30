@@ -18,6 +18,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
+    "test:e2e:watch": "jest --config ./test/jest-e2e.json --watch",
     "db:build": "docker compose up dev-db -d",
     "db:re:build": "docker rm -f -v jsoncv-dev-db-1 && sleep 2 && docker compose up dev-db -d",
     "typeormx": "typeorm-ts-node-commonjs",
